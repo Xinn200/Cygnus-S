@@ -1,4 +1,10 @@
 #include "Cygnus.dtsi"
+#include <input/processors.dtsi>
+
+// 追加: 移動量の間引きで端数を切り捨てず持ち越す（ゆっくり動かした時のカクつき防止）
+&zip_xy_scaler {
+    track-remainders;
+};
 
 &default_transform {
     col-offset = <6>;
@@ -19,6 +25,12 @@
         compatible = "zmk,input-listener";
         device = <&trackball>;
 
+        // 追加: ノートモード（レイヤー7）がオンの間、カーソル移動を 2/3 に縮める
+        // CPI 1200 x 2/3 = 800相当。数字を変えれば調整できる（例: 3 4 で900相当、1 2 で600相当）
+        laptop_mode {
+            layers = <7>;
+            input-processors = <&zip_xy_scaler 2 3>;
+        };
     };
 };
 
@@ -58,7 +70,7 @@
         spi-max-frequency = <2000000>;
         irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
         automouse-layer = <4>;
-        scroll-layers = <5>;
+        scroll-layers = <5 8>;    // 変更: 8を追加（ノートモード中でもスクロールできるように）
     };
 };
 
