@@ -18,9 +18,20 @@
     combos {
         compatible = "zmk,combos";
 
-        double_quotation {
-            bindings = <&kp DOUBLE_QUOTES>;
-            key-positions = <20 21>;
+        // 追加: 左手 23+24（大西配列のX+C）の同時押しで Tab
+        tab_left {
+            bindings = <&kp TAB>;
+            key-positions = <23 24>;
+            timeout-ms = <50>;               // 50ミリ秒以内の同時押しで発動
+            require-prior-idle-ms = <150>;   // 直前150ミリ秒以内に他のキーを打っていたら発動しない（タイピング中の誤爆防止）
+        };
+
+        // 追加: 右手 31+32（大西配列のM+J）の同時押しで Tab。左と鏡写しの位置
+        tab_right {
+            bindings = <&kp TAB>;
+            key-positions = <31 32>;
+            timeout-ms = <50>;
+            require-prior-idle-ms = <150>;
         };
     };
 
@@ -41,6 +52,17 @@
 
             #binding-cells = <2>;
             tapping-term-ms = <200>;
+        };
+
+        // 追加: 長押しでレイヤー移動、「一度タップしてすぐ長押し」でキーの連続入力（BSのリピート用）
+        lt_rep: lt_rep {
+            compatible = "zmk,behavior-hold-tap";
+            display-name = "LT Repeat";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <200>;
+            bindings = <&mo>, <&kp>;
         };
 
         ROTATE: ROTATE {
@@ -122,5 +144,27 @@
 &trans  &trans        &trans        &trans        &trans     &trans      &trans          &trans                                                  &bt BT_CLR_ALL
             >;
         };
+        // 追加: レイヤー7 ノートモード（中身は空。オンの間だけカーソルが遅くなる）
+        laptop_mode {
+            display-name = "LAPTOP";
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+        };
+
+        // 追加: レイヤー8 スクロール（従来のレイヤー5と同じ中身。ノートモード中でもスクロールが効く）
+        scroll_top {
+            display-name = "SCROLL2";
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&none  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+        };
+
     };
 };
