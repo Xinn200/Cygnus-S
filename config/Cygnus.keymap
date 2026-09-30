@@ -33,6 +33,65 @@
             timeout-ms = <50>;
             require-prior-idle-ms = <150>;
         };
+
+        // ---- 以下 2026-09-30 追加（ホーム段・上段コンボ）----
+        // layers = <0 7>：通常時(0)とノートモード時(7)だけ有効。
+        //   AML(レイヤー4)中はMB1〜MB5と重なるので無効にする。
+        // timeout-ms は既存より短い40ms（ホーム段の連続打鍵での誤爆対策）
+
+        // 左手 12+13（大西配列のA+O）→ 英数
+        eisu_ao {
+            bindings = <&kp LANG2>;
+            key-positions = <12 13>;
+            timeout-ms = <40>;
+            require-prior-idle-ms = <150>;
+            layers = <0 7>;
+        };
+
+        // 右手 18+19（大西配列のT+N）→ かな
+        kana_tn {
+            bindings = <&kp LANG1>;
+            key-positions = <18 19>;
+            timeout-ms = <40>;
+            require-prior-idle-ms = <150>;
+            layers = <0 7>;
+        };
+
+        // 左手 11+12（大西配列のI+A）→ Tab
+        tab_ia {
+            bindings = <&kp TAB>;
+            key-positions = <11 12>;
+            timeout-ms = <40>;
+            require-prior-idle-ms = <150>;
+            layers = <0 7>;
+        };
+
+        // 右手 19+20（大西配列のN+S）→ Tab
+        tab_ns {
+            bindings = <&kp TAB>;
+            key-positions = <19 20>;
+            timeout-ms = <40>;
+            require-prior-idle-ms = <150>;
+            layers = <0 7>;
+        };
+
+        // 左手 1+2（大西配列のL+U）→ Esc
+        esc_lu {
+            bindings = <&kp ESCAPE>;
+            key-positions = <1 2>;
+            timeout-ms = <40>;
+            require-prior-idle-ms = <150>;
+            layers = <0 7>;
+        };
+
+        // 右手 7+8（大西配列のR+Y）→ Esc
+        esc_ry {
+            bindings = <&kp ESCAPE>;
+            key-positions = <7 8>;
+            timeout-ms = <40>;
+            require-prior-idle-ms = <150>;
+            layers = <0 7>;
+        };
     };
 
     macros {
