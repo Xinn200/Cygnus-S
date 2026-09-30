@@ -6,6 +6,18 @@
     track-remainders;
 };
 
+// 追加(2026-09-30): Arai氏方式のAML（ZMK標準の一時レイヤー）
+// ボールが止まってから10秒間レイヤー4を保つ。下の番号のキー以外を押すと即座に抜ける
+&zip_temp_layer {
+    require-prior-idle-ms = <150>;   // 直前150ms以内にキーを打っていたらAMLに入らない（打鍵中に親指がボールに触れた時の誤作動対策）
+    excluded-positions = <
+        5 6 8 9          // 上段右: Ctrl+W, MB5, MB4, SCROLL2
+        10 22            // 左端: Ctrl, Shift（修飾クリック用）
+        17 18 19 20 21   // 中段右: PrSc, MB1, MB3, MB2, SCROLL2
+        30 32            // 下段右: Ctrl+PgUp, Ctrl+PgDn
+    >;
+};
+
 &default_transform {
     col-offset = <6>;
 };
@@ -24,12 +36,21 @@
     trackball_listener {
         compatible = "zmk,input-listener";
         device = <&trackball>;
+        input-processors = <&zip_temp_layer 4 10000>;   // 追加(2026-09-30): AML本体
+
+        // 追加(2026-09-30): スクロール中（レイヤー5・8）はAMLに入らない
+        // 何もしない処理（等倍）を置き、ここで処理を止めて上のAMLを通さない
+        scroll_no_aml {
+            layers = <5 8>;
+            input-processors = <&zip_xy_scaler 1 1>;
+        };
 
         // 追加: ノートモード（レイヤー7）がオンの間、カーソル移動を 1/2 に縮める
         // CPI 1200 x 1/2 = 600相当。数字を変えれば調整できる（例: 2 3 で800相当、1 3 で400相当）
         laptop_mode {
             layers = <7>;
             input-processors = <&zip_xy_scaler 1 2>;
+            process-next;   // 追加(2026-09-30): 減速のあとAML本体にも処理を渡す（無いとノートモード中にAMLが効かない）
         };
     };
 };
@@ -69,7 +90,7 @@
         reg = <0>;
         spi-max-frequency = <2000000>;
         irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-        automouse-layer = <4>;
+        // automouse-layer = <4>;   // 変更(2026-09-30): ドライバ側のAMLは停止。ZMK標準の一時レイヤーに置き換え
         scroll-layers = <8 5>;    // 変更: 8を先頭に（プログラムが最初の番号しか見ていない可能性への対策）
     };
 };
