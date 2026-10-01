@@ -73,7 +73,7 @@
         #input-processor-cells = <0>;
         always-active;
         enable-eager-mode;
-        stroke-size = <200>;            // 1タブ進むのに必要な移動量（仮想のノッチ幅）
+        stroke-size = <150>;            // 変更(2026-10-01): 200→150。1タブ進むのに必要な移動量（仮想のノッチ幅、約3mm）
         gesture-cooldown-ms = <200>;    // 変更(2026-10-01): 既定500→200。次のタブへ進めるまでの待ち時間（転がし続けた時の速さの上限）
 
         tab_prev {
