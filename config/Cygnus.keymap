@@ -40,6 +40,33 @@
 };
 
 / {
+    // 追加(2026-10-01): 2組目のジェスチャー（Y+P長押し中＝レイヤー10で有効）
+    // 左手側のビルドでは使わないので、参照されない時は省く(omit-if-no-ref)
+    /omit-if-no-ref/ zip_gesture_vd: zip_gesture_vd {
+        compatible = "zmk,input-processor-mouse-gesture";
+        #input-processor-cells = <0>;
+        always-active;
+        enable-eager-mode;
+        stroke-size = <200>;
+
+        vd_prev {
+            pattern = <GESTURE_LEFT>;
+            bindings = <&kp LC(LG(LEFT))>;    // 前の仮想デスクトップ
+        };
+        vd_next {
+            pattern = <GESTURE_RIGHT>;
+            bindings = <&kp LC(LG(RIGHT))>;   // 次の仮想デスクトップ
+        };
+        win_max {
+            pattern = <GESTURE_UP>;
+            bindings = <&kp LG(UP)>;          // 最大化
+        };
+        win_restore {
+            pattern = <GESTURE_DOWN>;
+            bindings = <&kp LG(DOWN)>;        // 復元（もう一度で最小化）
+        };
+    };
+
     combos {
         compatible = "zmk,combos";
 
@@ -65,6 +92,16 @@
         gesture_sh {
             bindings = <&lt 9 LA(TAB)>;
             key-positions = <20 21>;
+            timeout-ms = <40>;
+            require-prior-idle-ms = <150>;
+            layers = <0 4 7>;
+        };
+
+        // 追加(2026-10-01): 右手 8+9（大西配列のY+P）
+        //   タップ＝タスクビュー(Win+Tab)、長押し＝レイヤー10（仮想デスクトップ・ウィンドウのジェスチャー）
+        gesture_yp {
+            bindings = <&lt 10 LG(TAB)>;
+            key-positions = <8 9>;
             timeout-ms = <40>;
             require-prior-idle-ms = <150>;
             layers = <0 4 7>;
@@ -264,6 +301,17 @@
         // 追加(2026-10-01): レイヤー9 ジェスチャー（S+H長押し中だけ有効。キーは全部下のレイヤーのまま）
         gesture_sh_layer {
             display-name = "GESTURE";
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+        };
+
+        // 追加(2026-10-01): レイヤー10 ジェスチャー2（Y+P長押し中だけ有効。キーは全部下のレイヤーのまま）
+        gesture_yp_layer {
+            display-name = "GESTURE2";
             bindings = <
 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
