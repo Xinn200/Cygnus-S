@@ -74,7 +74,8 @@
         always-active;
         enable-eager-mode;
         stroke-size = <200>;            // 1タブ進むのに必要な移動量（約4mm）。150も試したが体感差なしのため200に戻した
-        gesture-cooldown-ms = <150>;    // 変更(2026-10-01): 既定500→200→150（試験中）。次のタブへ進めるまでの待ち時間
+        gesture-cooldown-ms = <200>;    // 変更(2026-10-01): 既定500→200。150も試したが体感差なし
+        partial-gesture-timeout-ms = <250>;  // 変更(2026-10-01): 既定400→250（試験中）。動かし続けた時に次の1タブを数え直すまでの時間？
 
         tab_prev {
             pattern = <GESTURE_LEFT>;
