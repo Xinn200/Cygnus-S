@@ -45,6 +45,12 @@
             input-processors = <&zip_mouse_gesture &zip_xy_scaler 0 1>;
         };
 
+        // 追加(2026-10-01): レイヤー10（Y+Pの長押し）の間は2組目のジェスチャー
+        gesture_yp {
+            layers = <10>;
+            input-processors = <&zip_gesture_vd &zip_xy_scaler 0 1>;
+        };
+
         // 追加(2026-09-30): スクロール中（レイヤー5・8）はAMLに入らない
         // 何もしない処理（等倍）を置き、ここで処理を止めて上のAMLを通さない
         scroll_no_aml {
