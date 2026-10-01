@@ -67,6 +67,32 @@
         };
     };
 
+    // 追加(2026-10-01): 3組目のジェスチャー（J+B長押し中＝レイヤー11で有効）
+    /omit-if-no-ref/ zip_gesture_tab: zip_gesture_tab {
+        compatible = "zmk,input-processor-mouse-gesture";
+        #input-processor-cells = <0>;
+        always-active;
+        enable-eager-mode;
+        stroke-size = <200>;
+
+        tab_prev {
+            pattern = <GESTURE_LEFT>;
+            bindings = <&kp LC(PG_UP)>;       // 前のタブ
+        };
+        tab_next {
+            pattern = <GESTURE_RIGHT>;
+            bindings = <&kp LC(PG_DN)>;       // 次のタブ
+        };
+        tab_reopen {
+            pattern = <GESTURE_UP>;
+            bindings = <&kp LC(LS(T))>;       // 閉じたタブを開き直す
+        };
+        tab_close {
+            pattern = <GESTURE_DOWN>;
+            bindings = <&kp LC(W)>;           // タブを閉じる
+        };
+    };
+
     combos {
         compatible = "zmk,combos";
 
@@ -74,7 +100,7 @@
         tab_left {
             bindings = <&kp TAB>;
             key-positions = <23 24>;
-            timeout-ms = <50>;               // 50ミリ秒以内の同時押しで発動
+            timeout-ms = <40>;               // 変更(2026-10-01): 50→40（全コンボの判定時間をそろえる）               // 50ミリ秒以内の同時押しで発動
             require-prior-idle-ms = <150>;   // 直前150ミリ秒以内に他のキーを打っていたら発動しない（タイピング中の誤爆防止）
         };
 
@@ -82,7 +108,7 @@
         tab_right {
             bindings = <&kp TAB>;
             key-positions = <31 32>;
-            timeout-ms = <50>;
+            timeout-ms = <40>;               // 変更(2026-10-01): 50→40（J+Bと共有するJで固まる不具合を避ける）
             require-prior-idle-ms = <150>;
         };
 
@@ -102,6 +128,67 @@
         gesture_yp {
             bindings = <&lt 10 LG(TAB)>;
             key-positions = <8 9>;
+            timeout-ms = <40>;
+            require-prior-idle-ms = <150>;
+            layers = <0 4 7>;
+        };
+
+        // 追加(2026-10-01): 右手 32+33（大西配列のJ+B）
+        //   タップ＝新しいタブ(Ctrl+T)、長押し＝レイヤー11（タブ操作のジェスチャー）
+        gesture_jb {
+            bindings = <&lt 11 LC(T)>;
+            key-positions = <32 33>;
+            timeout-ms = <40>;
+            require-prior-idle-ms = <150>;
+            layers = <0 4 7>;
+        };
+
+        // 追加(2026-10-01): 閉じる系コンボ（左右対称・ホームポジション）
+        //   3キー＝タブを閉じる、＋小指＝ウィンドウを閉じる、＋親指＝タスクマネージャー
+        // 左 I+A+O → タブを閉じる(Ctrl+W)
+        close_tab_l {
+            bindings = <&kp LC(W)>;
+            key-positions = <11 12 13>;
+            timeout-ms = <40>;
+            require-prior-idle-ms = <150>;
+            layers = <0 4 7>;
+        };
+        // 左 E+I+A+O → ウィンドウを閉じる(Alt+F4)
+        close_win_l {
+            bindings = <&kp LA(F4)>;
+            key-positions = <10 11 12 13>;
+            timeout-ms = <40>;
+            require-prior-idle-ms = <150>;
+            layers = <0 4 7>;
+        };
+        // 左 E+I+A+O+スペース → タスクマネージャー(Ctrl+Shift+Esc)
+        taskmgr_l {
+            bindings = <&kp LC(LS(ESCAPE))>;
+            key-positions = <10 11 12 13 38>;
+            timeout-ms = <40>;
+            require-prior-idle-ms = <150>;
+            layers = <0 4 7>;
+        };
+        // 右 T+N+S → タブを閉じる(Ctrl+W)
+        close_tab_r {
+            bindings = <&kp LC(W)>;
+            key-positions = <18 19 20>;
+            timeout-ms = <40>;
+            require-prior-idle-ms = <150>;
+            layers = <0 4 7>;
+        };
+        // 右 T+N+S+H → ウィンドウを閉じる(Alt+F4)
+        close_win_r {
+            bindings = <&kp LA(F4)>;
+            key-positions = <18 19 20 21>;
+            timeout-ms = <40>;
+            require-prior-idle-ms = <150>;
+            layers = <0 4 7>;
+        };
+        // 右 T+N+S+H+エンター → タスクマネージャー(Ctrl+Shift+Esc)
+        taskmgr_r {
+            bindings = <&kp LC(LS(ESCAPE))>;
+            key-positions = <18 19 20 21 41>;
             timeout-ms = <40>;
             require-prior-idle-ms = <150>;
             layers = <0 4 7>;
@@ -312,6 +399,17 @@
         // 追加(2026-10-01): レイヤー10 ジェスチャー2（Y+P長押し中だけ有効。キーは全部下のレイヤーのまま）
         gesture_yp_layer {
             display-name = "GESTURE2";
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+        };
+
+        // 追加(2026-10-01): レイヤー11 ジェスチャー3（J+B長押し中だけ有効。キーは全部下のレイヤーのまま）
+        gesture_jb_layer {
+            display-name = "GESTURE3";
             bindings = <
 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
