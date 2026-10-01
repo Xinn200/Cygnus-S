@@ -7,7 +7,9 @@ manifest:
     - name: Dist16384   # あなたのフォーク
       url-base: https://github.com/Dist16384
     - name: caksoylar  # <-- RGB LED
-      url-base: https://github.com/caksoylar  
+      url-base: https://github.com/caksoylar
+    - name: kot149  # 追加(2026-10-01): マウスジェスチャー
+      url-base: https://github.com/kot149
 
   projects:
     - name: zmk
@@ -22,6 +24,9 @@ manifest:
     - name: zmk-rgbled-widget
       remote: caksoylar
       revision: v0.3
+    - name: zmk-mouse-gesture  # 追加(2026-10-01)
+      remote: kot149
+      revision: v1
 
   self:
     path: config
